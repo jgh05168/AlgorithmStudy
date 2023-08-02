@@ -7,7 +7,7 @@ def solution(numbers):
 
     return str(int(''.join(numbers)))
 
-print(solution([0, 0, 0, 0]))
+
 
 
 
