@@ -7,10 +7,10 @@ def recur(N, number, val, cnt):
             ans = cnt
         return
 
-    # N을 1개부터 8개 사용하는 경우를 각각 고려
+    # N을 1 ~ 8개 사용하는 경우를 각각 생각해준다. -> 최대 8번 연산됌
     new_val = 0
     for i in range(1, 9):
-        new_val = new_val * 10 + N
+        new_val = new_val * 10 + N      # N을 1 ~ 8번 이어붙이는 경우에 대해 고려
         recur(N, number, val + new_val, cnt + i)
         recur(N, number, val - new_val, cnt + i)
         recur(N, number, val * new_val, cnt + i)
@@ -21,3 +21,4 @@ def solution(N, number):
     ans = -1
     recur(N, number, 0, 0)
     return ans
+
