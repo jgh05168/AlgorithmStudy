@@ -45,7 +45,7 @@ for tc in range(1, T + 1):
         area[-1][i] = False
 
     # 미생물 정보 입력 / 저장
-    bugs = []       # [0] : row | [1] : col | [2] : direction
+    bugs = []       # [0] : row | [1] : col | [2] : 미생물 수 | [3] : direction
                     # direction 정보
                     # 1 : 위쪽 | 2 : 아래쪽 | 3 : 왼쪽 | 4 : 오른쪽
     for i in range(K):
