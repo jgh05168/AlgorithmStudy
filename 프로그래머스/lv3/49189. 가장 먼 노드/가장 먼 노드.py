@@ -9,10 +9,10 @@ def bfs(G, v, n):
         for w in G[t]:
             if not visited[w]:
                 queue.append(w)
-                visited[w] = visited[t] + 1           # 이전 노드의 거리 + 1
+                visited[w] = visited[t] + 1           # 이전 노드의 거리 + 1 ==> 가장 멀리 떨어진 노드의 거리를 구할 수 있다.
 
-    max_v = max(visited)
-    cnt = 0
+    max_v = max(visited)        # 가장 긴 거리 확인(가장 멀리 떨어진 노드의 거리를 구하기 위함)
+    cnt = 0                     # 가장 멀리 떨어진 노드의 개수
     for i in visited:
         if max_v == i:
             cnt += 1
