@@ -17,7 +17,7 @@ def dfs(row, col, number):
 T = int(input())
 
 for tc in range(1, T + 1):
-    numbers = set()
+    numbers = set()     # 어차피 순서가 필요없으므로 list 대신 set을 쓴다면 실행속도가 훨씬 더 빠르다.
     N = 4
     grid = [list(input().split()) for _ in range(N)]
 
