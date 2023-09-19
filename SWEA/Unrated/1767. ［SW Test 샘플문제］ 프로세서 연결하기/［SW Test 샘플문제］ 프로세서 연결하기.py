@@ -40,11 +40,11 @@ def recur(core_num, val, connected):
 
             if go:
                 recur(core_num + 1, val + temp, connected + 1)
-            else:
-                recur(core_num + 1, val, connected)
 
             for brow, bcol in lines:
                 cells[brow][bcol] = 0
+
+        recur(core_num + 1, val, connected)
 
 
 T = int(input())
