@@ -20,7 +20,7 @@ dc = [1, 0, -1, 0]
 
 
 def dfs(row, col):
-    if memo[row][col]:
+    if memo[row][col]:         # main의 반복문과 마찬가지로 이미 방문한 지점이라면 현재 길보다 더 많이 갔다는 것이므로 반환해준다.
         return memo[row][col]
 
     memo[row][col] = 1
@@ -39,7 +39,7 @@ memo = [[0] * n for _ in range(n)]
 result = 0
 for i in range(n):
     for j in range(n):
-        if not memo[i][j]:
+        if not memo[i][j]:      # 이미 갔던 기록이 있다면, 그 경로가 현재 경로보다 더 많이 갔다는 것을 의미하므로 갈 필요가 없다.
             result = max(result, dfs(i, j))
 
 
