@@ -31,6 +31,9 @@ def bfs(srow, scol, erow, ecol, k, n, m):
     while queue:
         row, col, move_str, cnt = queue.pop(0)
 
+        if (row, col) == (erow, ecol) and (k - cnt) % 2 == 1:
+            continue
+
         if (row, col) == (erow, ecol) and cnt == k:
             answer = move_str
             break
