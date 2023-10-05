@@ -25,11 +25,11 @@ answer = ''
 
 def bfs(srow, scol, erow, ecol, k, n, m):
     global answer
-    queue = deque()
+    queue = []
     queue.append((srow, scol, '', 0))
 
     while queue:
-        row, col, move_str, cnt = queue.popleft()
+        row, col, move_str, cnt = queue.pop(0)
 
         if (row, col) == (erow, ecol) and cnt == k:
             answer = move_str
@@ -42,6 +42,9 @@ def bfs(srow, scol, erow, ecol, k, n, m):
                     continue
                 queue.append((nrow, ncol, move_str + str_list[d], cnt + 1))
                 break
+
+        queue.sort(key=lambda x: x[2])
+
 
 def solution(n, m, x, y, r, c, k):
     global answer
