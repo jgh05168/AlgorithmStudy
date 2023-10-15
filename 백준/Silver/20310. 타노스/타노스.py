@@ -9,15 +9,14 @@ for i in range(len(string)):
     else:
         ones += 1
 
-zeros /= 2
-ones /= 2
+zeros = zeros // 2
+ones = ones // 2
 
 new_string = ''
-while zeros:
-    new_string += '0'
-    zeros -= 1
-while ones:
-    new_string += '1'
-    ones -= 1
-
-print(new_string)
+for _ in range(zeros):
+    string = string[::-1]
+    string.remove('0')
+    string = string[::-1]
+for _ in range(ones):
+    string.remove('1')
+print(''.join(string))
