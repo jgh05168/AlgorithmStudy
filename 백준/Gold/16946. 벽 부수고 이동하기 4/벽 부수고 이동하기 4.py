@@ -6,6 +6,7 @@
 3. 맵 업데이트
 
 -------- 시간초과 ---------
+check_area 변수를 리스트가 아닌 set으로 바꾸어주니 해결
 '''
 
 from collections import deque
