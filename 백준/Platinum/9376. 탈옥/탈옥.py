@@ -1,3 +1,6 @@
+
+####################### 1번 방법 ##########################
+
 '''
 상근이의 존재에 대해 생각해야된다.
 
@@ -77,3 +80,71 @@ for _ in range(T):
             min_v = min(min_v, temp)
    
     print(min_v)
+
+
+
+# ####################### 2번 방법 ##########################
+# '''
+
+# 길이 합쳐진다면 그상태로 같이 이동해야한다.
+# '''
+
+# import heapq, sys
+# input = sys.stdin.readline
+
+# dr = [0, 1, 0, -1]
+# dc = [1, 0, -1, 0]
+
+# def dijkstra(prisoners, third):
+#     pq = prisoners
+#     for tmp in range(2):
+#         visited[tmp][prisoners[tmp][1]][prisoners[tmp][2]] = 0
+
+#     used_doors = [[] * 3 for _ in range(3)]
+#     while pq:
+#         cost, row, col, person = heapq.heappop(pq)
+
+#         if jail[row][col] != '*' and (row == 0 or row == h - 1 or col == 0 or col == w - 1):
+#             used_doors[person].append(cost)
+
+#         for d in range(len(dr)):
+#             nrow, ncol = row + dr[d], col + dc[d]
+#             if 0 <= nrow < h and 0 <= ncol < w and jail[nrow][ncol] != '*':
+#                 if jail[nrow][ncol] == '#':
+#                     new_cost = cost + 1
+#                 else:
+#                     new_cost = cost
+#                 if visited[person][nrow][ncol] > new_cost:
+#                     visited[person][nrow][ncol] = new_cost
+#                     heapq.heappush(pq, (new_cost, nrow, ncol, person))
+
+#                 #### !!!! 중복해서 이동했을 경우 !!!! #####
+#                 # 누군가가 먼저 이동했다면, 제 3자 이동 시작
+#                 # 제 3자가 아니고, 나 말고 다른 죄수가 이미 이동했다면
+#                 if person != third and visited[(person + 1) % 2][nrow][ncol] != int(1e9):
+#                     # 만약 제 3자의 문 연 개수가 업데이트하려는 문 연 개수보다 작을 경우 업데이트 후 pq에 넣어 탐색 시작하기
+#                     if visited[third][nrow][ncol] > cost + visited[(person + 1) % 2][nrow][ncol]:
+#                         visited[third][nrow][ncol] = cost + visited[(person + 1) % 2][nrow][ncol]
+#                         heapq.heappush(pq, (visited[third][nrow][ncol], nrow, ncol, third))
+
+#     if used_doors[third] != []:
+#         return min(min(used_doors[0]) + min(used_doors[1]), min(used_doors[2]))
+#     else:
+#         return min(used_doors[0]) + min(used_doors[1])
+
+
+# T = int(input())
+# for _ in range(T):
+#     h, w = map(int, input().split())
+#     jail = [list(input().rstrip()) for _ in range(h)]
+
+#     prisoners = []
+#     idx = 0
+#     for i in range(h):
+#         for j in range(w):
+#             if jail[i][j] == '$':
+#                 prisoners.append((0, i, j, idx))
+#                 idx += 1
+
+#     visited = [[[int(1e9)] * w for _ in range(h)] for _ in range(3)]
+#     print(dijkstra(prisoners, idx))
