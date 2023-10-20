@@ -35,3 +35,24 @@ for i in range(N):
                 print(ans[0], end=' ')
                 heapq.heappush(D, ans)
                 get_val = True
+
+# '''
+# deque 사용.
+# '''
+# from collections import deque
+# import sys
+# input = sys.stdin.readline
+
+# N, L = map(int, input().split())
+# li = list(map(int, input().split()))
+# q = deque()
+# for i in range(N):
+#     while q and q[-1] > li[i]:      # 큐에 값이 존재하고, 큐의 마지막값이 현재 들어온 값보다 큰 경우 뒤에서부터 pop
+#         q.pop()                     # = 현재 값보다 큰 이전 값들은 더이상 필요가 없다.
+#     q.append(li[i])         # 현재 값 append
+
+#     # 만약 i가 L 보다 크고 범위의 가장 낮은 값이 q의 첫번째 값이라면, 하나 꺼내기.
+#     if i >= L and li[i - L] == q[0]:
+#         q.popleft()
+
+#     print(q[0], end=' ')
