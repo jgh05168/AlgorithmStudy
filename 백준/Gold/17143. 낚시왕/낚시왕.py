@@ -66,7 +66,7 @@ def move_shark(sharks):
             else:
                 eaten_list.append((row, col, speed, direction, size))
 
-    grid = copy.deepcopy(temp_grid)
+    grid = temp_grid
     total_shark = list(set(list(temp_total_sharks)).difference(set(eaten_list)))
 
 
