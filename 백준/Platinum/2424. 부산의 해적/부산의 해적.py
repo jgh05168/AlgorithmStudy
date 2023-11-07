@@ -62,7 +62,6 @@ def update_sight():
             if grid[row][col] == 'I':
                 min_sight = INF
                 pirate_move[row][col] = -1
-                continue
             else:
                 if visited_pirate[row][col] < min_sight:
                     min_sight = visited_pirate[row][col]
@@ -75,7 +74,6 @@ def update_sight():
             if grid[row][col] == 'I':
                 min_sight = INF
                 pirate_move[row][col] = -1
-                continue
             else:
                 if visited_pirate[row][col] < min_sight:
                     min_sight = visited_pirate[row][col]
@@ -88,7 +86,6 @@ def update_sight():
             if grid[row][col] == 'I':
                 min_sight = INF
                 pirate_move[row][col] = -1
-                continue
             else:
                 if visited_pirate[row][col] < min_sight:
                     min_sight = visited_pirate[row][col]
@@ -101,7 +98,6 @@ def update_sight():
             if grid[row][col] == 'I':
                 min_sight = INF
                 pirate_move[row][col] = -1
-                continue
             else:
                 if visited_pirate[row][col] < min_sight:
                     min_sight = visited_pirate[row][col]
