@@ -12,45 +12,50 @@ deque에 (row, col, 말처럼 이동한 경우) 정보 저장
 오른쪽 아래 도착하면 바로 return
 '''
 
-
-import sys
 from collections import deque
+import sys
+input = sys.stdin.readline
 
-d = [(-1, 0), (1, 0), (0, 1), (0, -1)]
-hd = [(-1, -2), (-2, -1), (-2, 1), (-1, 2),
-      (1, -2), (2, -1), (2, 1), (1, 2)]
+horse_dr = [-1, 1, 2, 2, 1, -1, -2, -2]
+horse_dc = [2, 2, 1, -1, -2, -2, -1, 1]
 
-def check(nr, nc, k): # 이동 가능 여부 확인
-    if 0 <= nr < H and 0 <= nc < W and not visited[nr][nc][k] and maps[nr][nc] == 0:
-        return True
-    return False
+dr = [0, 1, 0, -1]
+dc = [1, 0, -1, 0]
 
-def bfs():
-    queue = deque([(0, 0, 0)])
+
+def bfs(srow, scol):
+    queue = deque()
+    queue.append((srow, scol, 0))
+    visited[0][srow][scol] = 0
+
     while queue:
-        r, c, k = queue.popleft()
-        if r == H-1 and c == W-1: # 도착점인 경우
-            return visited[r][c][k]-1 # 동작수의 최소값 return
-        for idx in range(4): # 4방향으로 이동하는 경우
-            nr = r + d[idx][0]
-            nc = c + d[idx][1]
-            if check(nr, nc, k):
-                queue.append((nr, nc, k))
-                visited[nr][nc][k] = visited[r][c][k] + 1
-        if k < K: # '말'의 움직임으로 이동하는 경우(k사용)
-            for idx in range(8):
-                nr = r + hd[idx][0]
-                nc = c + hd[idx][1]
-                if check(nr, nc, k+1):
-                    queue.append((nr, nc, k+1))
-                    visited[nr][nc][k+1] = visited[r][c][k] + 1
-    return -1 # 도착점으로 이동하지 못할 경우 -1 return
+        row, col, horse_act = queue.popleft()
 
-K = int(input())
-W, H = map(int, input().split())
-maps = [list(map(int, sys.stdin.readline().split())) for _ in range(H)]
+        # 말처럼 이동
+        for d in range(len(horse_dr)):
+            nrow, ncol = row + horse_dr[d], col + horse_dc[d]
+            if 0 <= nrow < h and 0 <= ncol < w and k - horse_act > 0 and visited[horse_act + 1][nrow][ncol] == -1 and not grid[nrow][ncol]:
+                if (nrow, ncol) == (h - 1, w - 1):
+                    return visited[horse_act][row][col] + 1
+                visited[horse_act + 1][nrow][ncol] = visited[horse_act][row][col] + 1
+                queue.append((nrow, ncol, horse_act + 1))
+        # 원숭이 이동
+        for d in range(len(dr)):
+            nrow, ncol = row + dr[d], col + dc[d]
+            if 0 <= nrow < h and 0 <= ncol < w and visited[horse_act][nrow][ncol] == -1 and not grid[nrow][ncol]:
+                if (nrow, ncol) == (h - 1, w - 1):
+                    return visited[horse_act][row][col] + 1
+                visited[horse_act][nrow][ncol] = visited[horse_act][row][col] + 1
+                queue.append((nrow, ncol, horse_act))
+    return -1
 
-visited = [[[0] * (K + 1) for _ in range(W)] for _ in range(H)]
-visited[0][0][0] = 1
 
-print(bfs())
+k = int(input())
+w, h = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(h)]
+visited = [[[-1] * w for _ in range(h)] for _ in range(k + 1)]
+
+if (w, h) == (1, 1):
+    print(0)
+else:
+    print(bfs(0, 0))
