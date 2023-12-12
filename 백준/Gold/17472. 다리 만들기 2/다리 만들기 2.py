@@ -6,6 +6,10 @@
 - 모든 섬을 찾을 때까지 반복
 
 이후 다리의 수 출력
+
+[추가]
+크루스칼 알고리즘 사용한 풀이
+https://ku-hug.tistory.com/160
 '''
 
 from collections import deque, defaultdict
