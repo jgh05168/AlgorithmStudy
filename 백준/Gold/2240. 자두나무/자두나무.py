@@ -5,14 +5,15 @@
 
 '''
 
-import sys, heapq
+import sys
 input = sys.stdin.readline
 
 
 t, w = map(int, input().split())
 dp = [[0] * (w + 1) for _ in range(t + 1)]    # 먹느냐 안먹느냐
 check_tree = [[0] * (w + 1) for _ in range(t + 1)]  # 어떤 나무에 서있는지 확인
-bef_tree = 0
+
+# 초기 나무와 얻은 자두 값 초기화
 for sj in range(w + 1):
     dp[0][sj] = 0
     check_tree[0][sj] = 1
