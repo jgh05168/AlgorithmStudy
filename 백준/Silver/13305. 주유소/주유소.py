@@ -19,6 +19,9 @@ roads = [0] + list(map(int, input().split()))
 cities = list(map(int, input().split()))
 
 min_v = 0
+min_cost = cities[0]
 for i in range(1, n):
-    min_v += min(cities[:i]) * roads[i]
+    if cities[i - 1] < min_cost:
+        min_cost = cities[i - 1]
+    min_v += min_cost * roads[i]
 print(min_v)
