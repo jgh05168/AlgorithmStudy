@@ -6,10 +6,8 @@
 100 * 100 * 100
 완탐 + bfs 로 충분히 가능할듯 함
 
---------완탐 + bfs 틀림-------
-
-다른 해결법 :
-최대로 큰 부분부터 방문해야 하므로 heapq 사용하여 탐색 -> 다익스트라로 다시 해보기
+--------틀림-------
+최대로 큰 부분부터 방문해야 하므로 heapq 사용하여 탐색 -> 다익스트라
 
 '''
 
@@ -22,15 +20,26 @@ def bfs(su):
     pq = []
     visited[su] = 0
     heapq.heappush(pq, (0, su))
+    tmp_cnt = locations[su]
 
     while pq:
         w, u = heapq.heappop(pq)
         for v, nw in graph[u]:
+            new_w = w + nw
             # 만약 수색 범위보다 크면 continue
-            if w + nw > m:
+            if new_w > m:
                 continue
-            visited[v] = w + nw
-            heapq.heappush(pq, (w + nw, v))
+            # 만약 다음 방문하는 곳이 이전에 방문한 곳의 weight보다 작다면 continue
+            if new_w >= visited[v]:    # 이미 방문한 곳임
+                continue
+            # 첫방문이라면, 보급상자 총합 업데이트 해주기
+            if visited[v] == int(1e9):
+                tmp_cnt += locations[v]
+
+            visited[v] = new_w
+            heapq.heappush(pq, (new_w, v))
+
+    max_ans = max(max_ans, tmp_cnt)
 
 
 n, m, r = map(int, input().split())
@@ -46,14 +55,14 @@ max_ans = 0
 for start in range(n):
     visited = [int(1e9)] * n
     bfs(start)
-    
-    tmp_ans = 0
-    # 갈 수 있는 모든 거리의 아이템 가치를 모두 더해준다.
-    # 다익스트라와 같이 쓰이지는 않는다. (따로 써야함)
-    for i in range(n):
-        if visited[i] <= m:
-            tmp_ans += locations[i]
-    
-    max_ans = max(max_ans, tmp_ans)
+
+    # tmp_ans = 0
+    # # 갈 수 있는 모든 거리의 아이템 가치를 모두 더해준다.
+    # # 다익스트라와 같이 쓰이지는 않는다. (따로 쓰임)
+    # for i in range(n):
+    #     if visited[i] <= m:
+    #         tmp_ans += locations[i]
+
+    # max_ans = max(max_ans, tmp_ans)
 
 print(max_ans)
