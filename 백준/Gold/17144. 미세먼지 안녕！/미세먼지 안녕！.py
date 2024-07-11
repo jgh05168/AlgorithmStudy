@@ -87,7 +87,6 @@ room = [list(map(int, input().split())) for _ in range(R)]
 
 # 공청기 위치 찾기
 top, bottom = (-1, -1), (-1, -1)
-dusts = deque()
 for i in range(R):
     for j in range(C):
         if room[i][j] == -1:
@@ -95,8 +94,7 @@ for i in range(R):
                 top = (i, j)
             else:
                 bottom = (i, j)
-        elif room[i][j]:
-            dusts.append((i, j))
+                
 
 for _ in range(T):
     # 0. 미세먼지 배열 위치 찾기
