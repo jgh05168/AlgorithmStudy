@@ -23,7 +23,7 @@ dc = [1, 0, -1, 0]
 def dfs(sr, sc, val):
     global ans
     for r in range(sr, n):
-        if r != 0:
+        if r != sr:     # 해당 row 일 때는 들어온 col보다 작은 값 보지 않기
             sc = 0
         for c in range(sc, m):
             if not selected[r][c]:
@@ -34,7 +34,7 @@ def dfs(sr, sc, val):
                     if 0 <= nr1 < n and 0 <= nr2 < n and 0 <= nc1 < m and 0 <= nc2 < m:
                         if not selected[nr1][nc1] and not selected[nr2][nc2]:
                             selected[nr1][nc1], selected[nr2][nc2], selected[r][c] = 1, 1, 1
-                            dfs(r, c + 1, val + grid[r][c] * 2 + grid[nr1][nc1] + grid[nr2][nc2])
+                            dfs(r, c, val + grid[r][c] * 2 + grid[nr1][nc1] + grid[nr2][nc2])
                             selected[nr1][nc1], selected[nr2][nc2], selected[r][c] = 0, 0, 0
             ans = max(ans, val)
 
