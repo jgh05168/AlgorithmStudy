@@ -1,18 +1,25 @@
-N = int(input())
-T = [0] * (N + 1)
-P = [0] * (N + 1)
-for i in range(N):
-    Ti, Pi = map(int, input().split())
-    T[i] = Ti
-    P[i] = Pi
+'''
+퇴사
 
-dp = [0] * (N + 1)
+날짜를 더해가면서, 초과하지 않는 경우, 값 업데이트하기
 
-# 뒤에서부터 확인
-for i in range(N - 1, -1, -1):
-    if T[i] + i <= N:       # 만약 idx + 상담에 걸리는 날짜 < 퇴사일 + 1
-        dp[i] = max(P[i] + dp[i + T[i]], dp[i + 1])     # 현재 price + [idx + 상담까지 걸리는 날의] dp값 과 다음 날의 최대값의 최대값을 비교 후 저장
-    else:
-        dp[i] = dp[i + 1]       # 상담을 하지 못하므로 dp의 이전 저장값을 불러온다
-    # print(dp)
-print(dp[0])
+'''
+
+import sys
+input = sys.stdin.readline
+
+n = int(input())
+schedule = []
+for _ in range(n):
+    schedule.append(tuple(map(int, input().split())))
+
+dp = [0] * (n + 1)
+for i in range(n):
+    # 일정 안에 상담을 진행할 수 있어야 함.
+    # 업데이트 범위는 (일정 + 상담에 필요한 날짜) 부터 퇴사날까지 
+    for j in range(i + schedule[i][0], n + 1):
+        # 이후에는 가치만 놓고 비교하기
+        if dp[j] < dp[i] + schedule[i][1]:
+            dp[j] = dp[i] + schedule[i][1]
+
+print(dp[-1])
