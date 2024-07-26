@@ -28,9 +28,11 @@ for i in range(1, n + 1):
     for j in range(i, t + 1):
         # 못넣는 경우,
         if study_time > j:
+            # 이전의 값을 그대로 가져온다.
             dp[i][j] = dp[i - 1][j]
         # 넣을 수 있는 경우
         else:
+            # 이전의 값 vs 새로 더해준 값을 비교해 최대값을 넣어준다.
             dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - study_time] + point)
 
 print(dp[-1][-1])
