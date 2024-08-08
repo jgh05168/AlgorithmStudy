@@ -1,53 +1,33 @@
 '''
-슬라이딩 윈도우 사용
-잘라서 체크해보기
+sliding window + 딕셔너리 사용
 '''
-
 from collections import deque
 import sys
 input = sys.stdin.readline
 
 s, p = map(int, input().split())
-dna = list(input().rstrip())
-counts = list(map(int, input().split()))
-A, C, G, T = 0, 0, 0, 0
-ans = 0
+string = list(str(input()))
+A, C, G, T = map(int, input().split())
 
-def add(ch):
-    global A, C, G, T
-    if ch == 'A':
-        A += 1
-    elif ch == 'C':
-        C += 1
-    elif ch == 'G':
-        G += 1
-    elif ch == 'T':
-        T += 1
+dic = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
+left, right = 0, p-1
+arr = deque(string[left:right])
+for i in arr:
+    dic[i] += 1
+cnt = 0
 
-def sub(ch):
-    global A, C, G, T
-    if ch == 'A':
-        A -= 1
-    elif ch == 'C':
-        C -= 1
-    elif ch == 'G':
-        G -= 1
-    elif ch == 'T':
-        T -= 1
+while right < s:
 
-sub_dna = deque([0] + dna[0:p - 1])
-for j in range(p):
-    add(sub_dna[j])
+    # 구간 완성
+    dic[string[right]] += 1 # 가장 오른쪽 원소 추가
 
-sub_p = p - 1
-for i in range(s - p + 1):
-    start, end = sub_dna.popleft(), dna[sub_p]
-    sub(start)
-    add(end)
-    sub_dna.append(end)
-    sub_p += 1
-    if A < counts[0] or C < counts[1] or G < counts[2] or T < counts[3]:
-        continue
-    ans += 1
+    # 계산
+    if dic['A'] >= A  and dic['C'] >= C and dic['G'] >= G and dic['T'] >= T:
+        cnt += 1
 
-print(ans)
+    # 구간이동
+    dic[string[left]] -= 1 # 가장 왼쪽 원소 제거
+    left += 1
+    right += 1
+
+print(cnt)
