@@ -26,14 +26,14 @@ t = int(input())
 for tc in range(1, t + 1):
     n, m, k = map(int, input().split())
     input_grid = [list(map(int, input().split())) for _ in range(n)]
-    grid = [[0] * 500 for _ in range(500)]
+    grid = [[0] * 351 for _ in range(351)]
     deactivate_cells = deque()
     activate_cells = []
     for i in range(n):
         for j in range(m):
-            grid[500 // 2 - (n // 2) + i + 1][500 // 2 - (m // 2) + j + 1] = input_grid[i][j]
+            grid[351 // 2 - (n // 2) + i + 1][351 // 2 - (m // 2) + j + 1] = input_grid[i][j]
             if input_grid[i][j]:
-                deactivate_cells.append((500 // 2 - (n // 2) + i + 1, 500 // 2 - (m // 2) + j + 1, input_grid[i][j]))
+                deactivate_cells.append((351 // 2 - (n // 2) + i + 1, 351 // 2 - (m // 2) + j + 1, input_grid[i][j]))
 
     for _ in range(k):
         new_activate = deque()
