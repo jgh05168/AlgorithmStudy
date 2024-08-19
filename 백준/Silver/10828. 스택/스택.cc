@@ -6,14 +6,14 @@ stack
 
 #include <iostream>
 #include <string>
-#include <stack>
+#include <vector>
 
 using namespace std;
 
 int main() {
 	int n;
 	cin >> n;
-	stack<int> arr;
+	vector<int> arr;
 
 	for (int i = 0; i < n; i++) {
 		string order;
@@ -22,14 +22,14 @@ int main() {
 
 		if (order == "push") {
 			cin >> tmp;
-			arr.push(tmp);
+			arr.push_back(tmp);
 		}
 		else if (order == "top") {
 			if (arr.size() == 0) {
 				cout << -1 << "\n";
 			}
 			else {
-				cout << arr.top() << "\n";
+				cout << arr[arr.size() - 1] << "\n";
 			}
 		}
 		else if (order == "size") {
@@ -48,8 +48,8 @@ int main() {
 				cout << -1 << "\n";
 			}
 			else {
-				cout << arr.top() << "\n";
-				arr.pop();
+				cout << arr[arr.size() - 1] << "\n";
+				arr.pop_back();
 			}
 		}
 	}
