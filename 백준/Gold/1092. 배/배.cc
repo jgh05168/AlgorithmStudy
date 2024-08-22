@@ -9,7 +9,8 @@
 2. 무거운 순서로 하나씩 집어넣는다.
 	크레인에 하나씩 할당하거나, 다 넣는 경우까지 반복
 ------ 시간초과 ------
-
+selected 배열을 사용하는 것이 아닌, vector의 erase를 사용하자.
+vector.erase() : O(n)
 */
 
 #include <iostream>
@@ -50,7 +51,6 @@ int main() {
 	}
 	else {
 		while (!boxes.empty()) {
-			int crain_choose[51] = { 0, };
 			// 크레인 배정 시작
 			for (int i = 0; i < n; i++) {
 				for (int j = box_idx; j < boxes.size(); j++) {
