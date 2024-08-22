@@ -20,7 +20,7 @@ vector.erase() : O(n)
 using namespace std;
 
 int n, m;
-vector<int> crains;
+vector<int> cranes;
 vector<int> boxes;
 
 int main() {
@@ -29,7 +29,7 @@ int main() {
 	int tmp;
 	for (int i = 0; i < n; i++) {
 		cin >> tmp;
-		crains.push_back(tmp);
+		cranes.push_back(tmp);
 	}
 	cin >> m;
 	for (int i = 0; i < m; i++) {
@@ -38,7 +38,7 @@ int main() {
 	}
 
 	// 크레인, 컨테이너 정렬
-	sort(crains.begin(), crains.end(), greater<int>());
+	sort(cranes.begin(), cranes.end(), greater<int>());
 	sort(boxes.begin(), boxes.end(), greater<int>());
 
 	int ans = 0;
@@ -46,7 +46,7 @@ int main() {
 	int box_move = 0;
 
 	// 더 무거운 짐이 있는지 확인
-	if (crains[0] < boxes[0]) {
+	if (cranes[0] < boxes[0]) {
 		cout << -1 << '\n';
 	}
 	else {
@@ -54,7 +54,7 @@ int main() {
 			// 크레인 배정 시작
 			for (int i = 0; i < n; i++) {
 				for (int j = box_idx; j < boxes.size(); j++) {
-					if (boxes[j] <= crains[i]) {
+					if (boxes[j] <= cranes[i]) {
 						boxes.erase(boxes.begin() + j);
 						box_move++;
 						break;
