@@ -28,6 +28,8 @@ bool cmp(village a, village b) {
 }
 
 int main() {
+	cin.tie(0); ios::sync_with_stdio(0);
+
 	cin >> n;
 	vector<village> country;
 
@@ -43,6 +45,10 @@ int main() {
 	sort(country.begin(), country.end(), cmp);
 
 	// 홀수일 때, 짝수일 때 중앙값이 다르다. 따라서 이를 한번에 처리해주어야 함
+	/*
+	sum/2 부분을 (sum % 2 == 0) ? sum / 2 : sum / 2 + 1; 로도 가능하지만, 
+	대게 간단하게 (sum+1)/2로도 바꾸셔도 됩니다.
+	*/
 	total_ppl = (total_ppl + 1) / 2;
 
 	
