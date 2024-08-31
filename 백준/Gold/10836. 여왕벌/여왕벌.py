@@ -44,3 +44,54 @@ if __name__ == '__main__':
             else:
                 print(larva[M + j - 1], end=' ')
         print()
+
+
+'''
+dp로도 해결 가능함
+1. n만큼 반복문 돌기
+    - 0, 1, 2만큼 값을 증가시킬 수 있으므로, 1과 2 값 증가가 시작하는 부분에 +1을 진행해준다.
+2. dp 돌면서 이전에 저장한 값의 1이 증가했다면, cnt++ 로 값 증가시키며 업데이트하기
+
+import sys
+input = sys.stdin.readline
+
+def grow(p, M):
+    dp = [[1 for _ in range(M)] for _ in range(M)]
+    r, c = M - 1, 0
+    cnt = 0
+    for i in range(2 * M - 1):
+        cnt += p[i]
+        dp[r][c] += cnt
+        if r != 0:
+            r -= 1
+        else:
+            c += 1
+
+    return dp
+
+def solution():
+    M, N = map(int, input().split())
+    p = [0 for _ in range(2 * M - 1)]
+    for _ in range(N):
+        tmp = tuple(map(int, input().split()))
+        idx = 0
+        for i in range(3):
+            idx += tmp[i]
+            if idx >= 2 * M - 1:
+                break
+            p[idx] += 1
+
+    dp = grow(p, M)
+
+    for i in range(1, M):
+        for j in range(1, M):
+            if (i, j) == (1, 1):
+                dp[i][j] = max(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    for row in dp:
+        print(*row)
+
+solution()
+'''
