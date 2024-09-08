@@ -43,6 +43,7 @@ def solution(n, k, enemy):
         if sumEnemy > n:
             if k == 0:
                 break
+            # 지금까지 마주한 적군 수에서 무적권을 사용한 적군 수를 빼어 정상화 시켜주어야 함
             sumEnemy += heapq.heappop(heap)
             k -= 1
         answer += 1
