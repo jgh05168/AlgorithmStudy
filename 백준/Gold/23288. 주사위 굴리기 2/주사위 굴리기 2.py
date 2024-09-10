@@ -19,6 +19,8 @@ n x m
 2. 주사위 아랫면 : 주사위 좌표 (3, 1)
 3. 이동하면 점수 산정을 위한 bfs 진행
 4. 이동방향 결정
+--------------------------------------
+주사위를 배열로 정해주지 말고, 값을 바로바로 업데이트 해주기(하드코딩)
 '''
 
 from collections import deque
@@ -29,44 +31,21 @@ input = sys.stdin.readline
 dr = [0, 1, 0, -1]
 dc = [1, 0, -1, 0]
 
-row_dir = [(1, 0), (1, 1), (1, 2), (3, 1)]
-col_dir = [(0, 1), (1, 1), (2, 1), (3, 1)]
 
-
-def rotate(sd):
-    new_dice = [[0] * 3 for _ in range(4)]
-    # 동
-    if not sd:
-        for i in range(len(row_dir)):
-            r, c = row_dir[i]
-            nr, nc = row_dir[(i + 1) % 4]
-            new_dice[nr][nc] = dice[r][c]
-    # 남
-    elif sd == 1:
-        for i in range(len(col_dir)):
-            r, c = col_dir[i]
-            nr, nc = col_dir[(i + 1) % 4]
-            new_dice[nr][nc] = dice[r][c]
-    # 서
-    elif sd == 2:
-        for i in range(len(row_dir)):
-            r, c = row_dir[i]
-            nr, nc = row_dir[(i - 1) % 4]
-            new_dice[nr][nc] = dice[r][c]
-    # 북
+def rotate(d):
+    global top, bottom, east, west, south, north
+    # 동쪽
+    if not d:
+        top, east, bottom, west = west, top, east, bottom
+    # 남쪽
+    elif d == 1:
+        top, south, bottom, north = north, top, south, bottom
+    # 서쪽
+    elif d == 2:
+        top, west, bottom, east = east, top, west, bottom
+    # 북쪽
     else:
-        for i in range(len(col_dir)):
-            r, c = col_dir[i]
-            nr, nc = col_dir[(i - 1) % 4]
-            new_dice[nr][nc] = dice[r][c]
-
-    # 나머지 주사위 완성하기
-    for i in range(4):
-        for j in range(3):
-            if not new_dice[i][j] and dice[i][j]:
-                new_dice[i][j] = dice[i][j]
-
-    return new_dice
+        top, north, bottom, south = south, top, north, bottom
 
 
 def bfs(sr, sc, val):
@@ -88,10 +67,10 @@ def bfs(sr, sc, val):
 
 
 def get_direction():
-    a, b = dice[dice_bottom[0]][dice_bottom[1]], board[nr][nc]
-    if a > b:
+    b = board[nr][nc]
+    if bottom > b:
         return (d + 1) % 4
-    elif a < b:
+    elif bottom < b:
         return (d - 1) % 4
     else:
         return d
@@ -100,8 +79,14 @@ def get_direction():
 n, m, k = map(int, input().split())
 board = [list(map(int, input().split())) for _ in range(n)]
 r, c, d = 0, 0, 0
-dice = [[0, 2, 0], [4, 1, 3], [0, 5, 0], [0, 6, 0]]
-dice_bottom = (3, 1)
+
+# 주사위 눈 정하기
+top = 1
+bottom = 6
+east = 3
+west = 4
+north = 2
+south = 5
 
 ans = 0
 for _ in range(k):
@@ -112,7 +97,7 @@ for _ in range(k):
         nr, nc = r + dr[d], c + dc[d]
 
     # 1. 주사위 이동
-    dice = rotate(d)
+    rotate(d)
 
     # 2. 점수 획득
     ans += bfs(nr, nc, board[nr][nc])
