@@ -7,5 +7,7 @@ def solution(elements):
         res.add(ssum)
         for j in range(i+1, i+ll):
             ssum += elements[j%ll]
+            # print(ssum, end=' ')
             res.add(ssum)
+        # print()
     return len(res)
