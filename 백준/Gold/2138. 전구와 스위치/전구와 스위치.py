@@ -5,7 +5,7 @@ i번 스위치를 누르면 i - 1, i + 1, i 세 개의 상태가 바뀐다.
 현재 스위치와 결과 자리수가 같은 경우 : 다음 결과가 다르다면, 누르기
 현재 스위치와 결과 자리수가 다른 경우 : 이전 애들이 다르면 누르기
 '''
-import copy
+
 import sys
 input = sys.stdin.readline
 
@@ -44,7 +44,7 @@ def push(switch, cnt):
 n = int(input())
 switch_off = list(int(i) == 1 for i in input().rstrip())
 # 맨 처음 놈은 누르는지, 누르지 않는지 모든 경우에 대해 판단
-switch_on = copy.deepcopy(switch_off)
+switch_on = switch_off[:]
 switch_on[0] = not switch_on[0]
 switch_on[1] = not switch_on[1]
 
