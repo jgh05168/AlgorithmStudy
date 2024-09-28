@@ -11,25 +11,14 @@ input = sys.stdin.readline
 
 def push(switch, cnt):
     for i in range(1, n - 1):
-        # 0. 만약 세군대 모두
-        # 1. 이전 애들부터 신경쓰기
+        # 이전 애들만 신경써줘도 문제는 해결된다
+        # 그리디 : 이전 결과에 대해 다시 생각하지 않음
         if switch[i - 1] != target[i - 1]:
             cnt += 1
             switch[i - 1] = not switch[i - 1]
             switch[i] = not switch[i]
             switch[i + 1] = not switch[i + 1]
 
-        # 2. 다음 애들 신경쓰기
-        elif switch[i] == target[i] and switch[i - 1] != target[i - 1]:
-            if switch[i + 1] != target[i + 1]:
-                cnt += 1
-                switch[i - 1] = not switch[i - 1]
-                switch[i] = not switch[i]
-                switch[i + 1] = not switch[i + 1]
-
-        # 맞는지 체크
-        if switch == target:
-            return cnt
 
     # 맨 마지막 놈
     if switch[-1] != target[-1]:
