@@ -19,11 +19,13 @@ def solution(s):
         new_s.append(i.split(','))
 
     new_s.sort(key = len)
-
+    
+    answer_set = set()
     for i in new_s:
         for j in range(len(i)):
-            if int(i[j]) not in answer:
+            if int(i[j]) not in answer_set:
                 answer.append(int(i[j]))
+                answer_set.add(int(i[j]))
 
     return answer
 
