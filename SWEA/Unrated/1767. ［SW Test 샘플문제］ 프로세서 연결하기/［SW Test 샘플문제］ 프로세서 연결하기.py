@@ -1,66 +1,85 @@
 '''
-1. 자리 하나에는 cell 혹은 전선만 가능
-2. 가장자리는 건들면  안돼 - 전원연결
-3. 전선은 절대 교차하면 안된다.
-4. core와 전원을 연결하는 전선은 직선으로만 설치 가능
-5. 가장자리 core는 전원이 연결된 것으로 본다.
+n x n
+한개의 cell 에는 1개의 core 혹은 전선이 올 수 있음
+- 전선은 직선으로만 설치 가능
+- 교차해서는 안된다
+- 가장자리에 위치한 코어는 이미 전원이 연결된 것으로 간주한다
+- 최대한 많은 코어에 전선을 연결했을 경우, 전선 길이의 합을 구하고자 함
+
+최대 12 x 12
+코어 개수 12개 이하
+전원이 연결되지 않은 코어 존재 가능
+
+풀이:
+이미 지나간 코어를 행 x 열 따로 저장하는 방법은 ?
+set.update(), set.remove
+1. 프로세스 위치들 저장
+2. 뽑아서 사용 - 12! x 5
+- 전원이 연결되는 경우가 아니라면 의미없음
+- 전원이 연결되는 경우에 대해 가지치기 진행
+    - 최대 경우보다 작다면 return
 '''
 
 dr = [0, 1, 0, -1]
 dc = [1, 0, -1, 0]
 
 
-def recur(core_num, val, connected):
-    global min_v
-    global max_connected
-    if core_num > len(cores) - 1:
-        if max_connected < connected:
-            max_connected = connected
-            min_v = val
-        elif max_connected == connected:
-            if min_v > val:
-                min_v = val
+def dfs(idx, core_cnt, lines):
+    global ans, max_core, line_set
+    # 가지치기
+    if core_cnt + (cores - idx) < max_core:
         return
+    # 모든 경우가 가능하다면
+    if idx == cores:
+        if max_core < core_cnt:
+            max_core = core_cnt
+            ans = lines
+        else:
+            ans = min(ans, lines)
+        return
+    for i in range(idx, cores):
+        if not selected[i]:
+            r, c = core_list[i]
+            for d in range(len(dr)):
+                tmp = set()
+                nr, nc = r + dr[d], c + dc[d]
+                flag = 0
+                while 0 <= nr < n and 0 <= nc < n:
+                    if (nr, nc) in line_set:
+                        flag = 1
+                        break
+                    else:
+                        tmp.add((nr, nc))
+                        nr, nc = nr + dr[d], nc + dc[d]
+                # 만약 무리없이 다 이어졌다면,
+                if not flag:
+                    line_set.update(tmp)
+                    selected[i] = 1
+                    dfs(i + 1, core_cnt + 1, lines + len(tmp))
+                    selected[i] = 0
+                    line_set = line_set.difference(tmp)
+                # 이어지지 않았다면, 이어서 진행
+                
 
-    else:
-        row, col = cores[core_num]
-        for d in range(len(dr)):
-            nrow, ncol = row + dr[d], col + dc[d]
-            go = True
-            temp = 0
-            lines = []
-            while 0 <= nrow < N and 0 <= ncol < N:
-                if cells[nrow][ncol]:
-                    go = False
-                    break
-                lines.append((nrow, ncol))
-                cells[nrow][ncol] = 2
-                nrow, ncol = nrow + dr[d], ncol + dc[d]
-                temp += 1
+t = int(input())
+for tc in range(1, t + 1):
+    n = int(input())
+    grid = [list(map(int, input().split())) for _ in range(n)]
 
-            if go:
-                recur(core_num + 1, val + temp, connected + 1)
+    # 0. 코어 위치 찾기
+    core_list = []
+    selected = []
+    line_set = set()
+    for i in range(n):
+        for j in range(n):
+            if grid[i][j]:
+                core_list.append((i, j))
+                selected.append(0)
+                line_set.add((i, j))
+    cores = len(core_list)
 
-            for brow, bcol in lines:
-                cells[brow][bcol] = 0
+    ans, max_core = n * n, 0
+    # 1. 코어 재귀들어가기
+    dfs(0, 0, 0)     # idx, core, lines
 
-        recur(core_num + 1, val, connected)
-
-
-T = int(input())
-
-for tc in range(1, T + 1):
-    N = int(input())
-    cells = [list(map(int, input().split())) for _ in range(N)]
-
-    cores = []
-    # 가장자리 아닌 코어들 좌표 저장
-    for i in range(1, N - 1):
-        for j in range(1, N - 1):
-            if cells[i][j]:
-                cores.append((i, j))
-
-    min_v = N ** 2
-    max_connected = 0
-    recur(0, 0, 0)
-    print(f'#{tc} {min_v}')
+    print(f'#{tc} {ans}')
