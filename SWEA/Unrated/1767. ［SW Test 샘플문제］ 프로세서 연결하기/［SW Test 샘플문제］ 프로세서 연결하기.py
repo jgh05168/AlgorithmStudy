@@ -20,41 +20,56 @@ set.update(), set.remove
     - 최대 경우보다 작다면 return
 '''
 
-dr = [0, 1, 0, -1]
+dr = [0, 1, 0, -1]  # 방향: 오른쪽, 아래, 왼쪽, 위쪽
 dc = [1, 0, -1, 0]
 
 
 def dfs(idx, core_cnt, lines):
-    global ans, max_core, line_set
-    # 가지치기
+    global ans, max_core
+    # 가지치기: 남은 코어를 모두 연결해도 현재 최대 코어 수에 못 미치면 중단
     if core_cnt + (cores - idx) < max_core:
         return
-    # 모든 경우가 가능하다면
+
+    # 모든 코어를 처리했으면 결과 갱신
     if idx == cores:
         if max_core < core_cnt:
             max_core = core_cnt
             ans = lines
-        else:
+        elif max_core == core_cnt:
             ans = min(ans, lines)
         return
+
+    # 현재 코어 위치
     r, c = core_list[idx]
-    for d in range(len(dr)):
-        tmp = set()
+
+    # 4방향으로 전선 설치 시도
+    for d in range(4):
+        tmp = []
         nr, nc = r + dr[d], c + dc[d]
-        flag = 0
+        flag = False
+
+        # 전선을 놓을 수 있는지 확인
         while 0 <= nr < n and 0 <= nc < n:
-            if (nr, nc) in line_set:
-                flag = 1
+            if grid[nr][nc] != 0:  # 이미 전선 또는 코어가 있는 경우
+                flag = True
                 break
-            else:
-                tmp.add((nr, nc))
-                nr, nc = nr + dr[d], nc + dc[d]
-        # 만약 무리없이 다 이어졌다면,
+            tmp.append((nr, nc))  # 전선 설치 가능 위치 저장
+            nr, nc = nr + dr[d], nc + dc[d]
+
+        # 전선을 놓을 수 있다면
         if not flag:
-            line_set.update(tmp)
+            # 전선 설치
+            for tr, tc in tmp:
+                grid[tr][tc] = 2  # 2는 전선을 의미
+
+            # 다음 코어 탐색
             dfs(idx + 1, core_cnt + 1, lines + len(tmp))
-            line_set = line_set.difference(tmp)
-        # 이어지지 않았다면, 이어서 진행
+
+            # 백트래킹: 전선을 다시 없앰
+            for tr, tc in tmp:
+                grid[tr][tc] = 0
+
+    # 현재 코어를 연결하지 않고 넘어가는 경우
     dfs(idx + 1, core_cnt, lines)
 
 
@@ -63,18 +78,18 @@ for tc in range(1, t + 1):
     n = int(input())
     grid = [list(map(int, input().split())) for _ in range(n)]
 
-    # 0. 코어 위치 찾기
+    # 0. 코어 위치 찾기 (가장자리 코어는 제외)
     core_list = []
-    line_set = set()
-    for i in range(n):
-        for j in range(n):
-            if grid[i][j]:
+    for i in range(1, n - 1):
+        for j in range(1, n - 1):
+            if grid[i][j] == 1:
                 core_list.append((i, j))
-                line_set.add((i, j))
     cores = len(core_list)
 
-    ans, max_core = n * n, 0
-    # 1. 코어 재귀들어가기
-    dfs(0, 0, 0)     # idx, core, lines
+    # 결과 초기화
+    ans, max_core = float('inf'), 0
+
+    # 1. DFS 탐색 시작
+    dfs(0, 0, 0)
 
     print(f'#{tc} {ans}')
