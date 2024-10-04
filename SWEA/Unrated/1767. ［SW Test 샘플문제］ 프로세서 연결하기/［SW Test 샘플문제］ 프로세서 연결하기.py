@@ -37,29 +37,26 @@ def dfs(idx, core_cnt, lines):
         else:
             ans = min(ans, lines)
         return
-    for i in range(idx, cores):
-        if not selected[i]:
-            r, c = core_list[i]
-            for d in range(len(dr)):
-                tmp = set()
-                nr, nc = r + dr[d], c + dc[d]
-                flag = 0
-                while 0 <= nr < n and 0 <= nc < n:
-                    if (nr, nc) in line_set:
-                        flag = 1
-                        break
-                    else:
-                        tmp.add((nr, nc))
-                        nr, nc = nr + dr[d], nc + dc[d]
-                # 만약 무리없이 다 이어졌다면,
-                if not flag:
-                    line_set.update(tmp)
-                    selected[i] = 1
-                    dfs(i + 1, core_cnt + 1, lines + len(tmp))
-                    selected[i] = 0
-                    line_set = line_set.difference(tmp)
-                # 이어지지 않았다면, 이어서 진행
-                
+    r, c = core_list[idx]
+    for d in range(len(dr)):
+        tmp = set()
+        nr, nc = r + dr[d], c + dc[d]
+        flag = 0
+        while 0 <= nr < n and 0 <= nc < n:
+            if (nr, nc) in line_set:
+                flag = 1
+                break
+            else:
+                tmp.add((nr, nc))
+                nr, nc = nr + dr[d], nc + dc[d]
+        # 만약 무리없이 다 이어졌다면,
+        if not flag:
+            line_set.update(tmp)
+            dfs(idx + 1, core_cnt + 1, lines + len(tmp))
+            line_set = line_set.difference(tmp)
+        # 이어지지 않았다면, 이어서 진행
+    dfs(idx + 1, core_cnt, lines)
+
 
 t = int(input())
 for tc in range(1, t + 1):
@@ -68,13 +65,11 @@ for tc in range(1, t + 1):
 
     # 0. 코어 위치 찾기
     core_list = []
-    selected = []
     line_set = set()
     for i in range(n):
         for j in range(n):
             if grid[i][j]:
                 core_list.append((i, j))
-                selected.append(0)
                 line_set.add((i, j))
     cores = len(core_list)
 
