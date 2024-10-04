@@ -9,6 +9,9 @@
 - 길이 = 마감기한
 - 만약 마감기한을 넘는데, 점수가 더 크다 ? 맨 앞 녀석과 비교
 - n < 1000이기 때문에 한 번 더 반복문 돌아도 가능함
+-------------------------------------------------------------
+과제 점수는 정렬되어있기 때문에 점수가 큰 순으로 반복문 돈다
+== 우선순위큐 사용할 필요 없음 ㅋ ㅋ
 '''
 
 import sys, heapq
@@ -36,14 +39,14 @@ for i in range(n):
             heapq.heappush(pq, (day, value))
             due_date_list[j] = 1
             break
-    # 앞에 빈자리 없다면, 이미 있는애 자리 먹기
-    else:
-        # 첫번째 녀석과 비교
-        init_day, init_value = heapq.heappop(pq)
-        if init_value < value:
-            heapq.heappush(pq, (day, value))
-        else:
-            heapq.heappush(pq, (init_day, init_value))
+    # # 앞에 빈자리 없다면, 이미 있는애 자리 먹기
+    # else:
+    #     # 첫번째 녀석과 비교
+    #     init_day, init_value = heapq.heappop(pq)
+    #     if init_value < value:
+    #         heapq.heappush(pq, (day, value))
+    #     else:
+    #         heapq.heappush(pq, (init_day, init_value))
 
 
 print(sum(i[1] for i in pq))
