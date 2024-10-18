@@ -21,12 +21,13 @@ int n;
 
 
 int main() {
+	cin.tie(0); ios::sync_with_stdio(false);
 	cin >> n;
 	vector<pair<int, int>> timetable(n);
 	for (int i = 0; i < n; i++) cin >> timetable[i].first >> timetable[i].second;
 	priority_queue<int> pq;
 
-	// 끝나는시간 오름차순으로 정렬
+	// 우선 정렬하고 시작
 	sort(timetable.begin(), timetable.end());
 
 	// 첫번째 녀석은 pq에 저장
