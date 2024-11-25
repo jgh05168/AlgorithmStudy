@@ -1,25 +1,28 @@
 '''
-왼쪽 한 번 탐색
-오른쪽도 탐색
-
-이해관계가 맞다면 count
+left, right 반복해가며 최대 위치를 저장하기
+이후, 순회하면서 min(left, right)보다 현재 위치가 작으면 값 더해주기
 '''
 
 import sys
 input = sys.stdin.readline
 
 h, w = map(int, input().split())
-heights = list(map(int, input().split()))
-ans = 0
-# 하나의 위치를 잡고, 그 두 점 줌 최소 위치에 대해 저장
-for i in range(1, w - 1):
-    left = max(heights[:i])
-    right = max(heights[i + 1:])
+arr = list(map(int, input().split()))
+left = [0] * w
+right = [0] * w
 
-    min_height = min(left, right)
-    # 좌우의 블럭 높이의 최댓값 중 작은 값이 현재 블록보다 크다면
-    # 반대쪽 값도 그 블럭보다 크다. 따라서 작은 값 - 현재블럭 높이 만큼 ans에 저장.
-    if heights[i] < min_height:
-       ans += min_height - heights[i]
+left[0] = arr[0]
+right[-1] = arr[-1]
+for i in range(1, w):
+    left[i] = max(left[i - 1], arr[i])
+for i in range(w - 2, -1, -1):
+    right[i] = max(right[i + 1], arr[i])
+
+# 순회 시작
+ans = 0
+for i in range(w):
+    height = min(left[i], right[i])
+    if arr[i] < height:
+        ans += height - arr[i]
 
 print(ans)
