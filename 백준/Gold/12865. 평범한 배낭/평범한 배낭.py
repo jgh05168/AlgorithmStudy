@@ -4,6 +4,9 @@
 탑다운 방식
 '''
 
+import sys
+input = sys.stdin.readline
+
 def recur(cnt, weight):
     # 범위 넘어가는 경우
     if weight > k or cnt > n:
