@@ -1,30 +1,32 @@
 '''
-모두 크기가 같은 상자 사용 & 빈 재활용 상자 수거
-i 번째 집은 j번째 집과 j - i만큼 떨어져 있다.
+n개의 집에 택배 배달 가려고 한다.
+배달 다니면서 빈 택배상자들 수거
+트럭에는 재활용 택배상자를 최대 cap개 실을 수 있음
 
-- 트럭에는 cap개 상자를 실을 수 있음
-- 각 집마다 배달 및 빈 상자의 개수를 알고 있다. -> 최소 이동 거리를 구하자
-각 집에 배달 및 수거할 때, 원하는 개수만큼 택배를 배달 및 수거할 수 있습니다.
+각 집마다 배달할 택배상자 개수와 수거 개수를 알고있을 때, 최소이동거리 구하기
 
 풀이:
-- 뒤에서부터 idx를 게산한다.
-- 배달이 불가능 할 경우, 거리 계산 후 박스 들/말 계산
-    - 둘 다 0보다 작거나 같으면 박스를 더 들거나 수거할 수 있는 상태
-    - 양수인 경우, 수거/배달 불가능한 상태이므로 거리 계산
+돌아오는 거리는 최대한 먼 곳 x 2이다.
+n - 1부터 계산해보기, 택배상자의 개수를 cap만큼 미리 체크해야된다.
+n <= 100000이므로 원트에 끝내야 됨
+배달과 수거 인덱스를 따로 생각해주기
 '''
+
 def solution(cap, n, deliveries, pickups):
     answer = 0
-
-    have_to_deli = 0
-    have_to_pick = 0
-
-    for i in range(n - 1, -1, -1):
-        have_to_deli += deliveries[i]
-        have_to_pick += pickups[i]
-
-        while have_to_deli > 0 or have_to_pick > 0:
-            have_to_deli -= cap
-            have_to_pick -= cap
-            answer += (i + 1) * 2
-
+    
+    # 뒤에서부터 돌아보기
+    dval, pval = 0, 0
+    for idx in range(n - 1, -1, -1):
+        dval += deliveries[idx]
+        pval += pickups[idx]
+        
+        
+        # cap만큼 더 담을 수 없는 경우, answer 계산 후 cap만큼 빼주기
+        while dval > 0 or pval > 0:
+            dval -= cap
+            pval -= cap
+            answer += (idx + 1) * 2
+        
+    
     return answer
