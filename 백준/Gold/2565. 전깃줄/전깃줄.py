@@ -1,28 +1,15 @@
 '''
-LIS
-
-1. 정렬
-2. 앞순서의 B가 뒷순서의 B보다 최대가 되도록 이어지게 하기
+교차하는 애들을 없애주면 된다.
+교차하지 않는 최대 길이를 구한 뒤, 전체 길이에서 빼주기
 '''
 
-import sys
-input = sys.stdin.readline
-
 n = int(input())
-lines = []
-for _ in range(n):
-    lines.append(tuple(map(int, input().split())))
-
-lines.sort(key=lambda x: x[0])
+arr = sorted([list(map(int, input().split())) for _ in range(n)])
 
 dp = [1] * n
-
 for i in range(n):
-    # 이전에 연결에서 몇 줄이나 연결되어 있는지 확인해보기
-    for j in range(i):
-        # 만약 한 줄 더 연결할 수 있다면, max로 증가시키기
-        if lines[i][1] > lines[j][1]:
-            dp[i] = max(dp[i], dp[j] + 1)
+    for j in range(i + 1, n):
+        if arr[i][1] < arr[j][1]:
+            dp[j] = max(dp[j], dp[i] + 1)
 
-# n에서 가장 많이 연결된 전깃줄 개수 빼기
 print(n - max(dp))
