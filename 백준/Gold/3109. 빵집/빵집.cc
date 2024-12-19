@@ -45,6 +45,7 @@ int dfs(int r, int c) {
 			if (flag)
 				return 1;
 			// 그리디로 해결하기 위해 이놈 없애주기
+			// 이유 : 한 번 못 간 곳은 다시 방문해도 못가는 곳이기 때문이다.
 			// visited[nr][nc] = 0;
 		}
 	}
