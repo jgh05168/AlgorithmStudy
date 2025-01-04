@@ -1,9 +1,4 @@
 /*
-각 보석은 무게 m과 가격 v를 갖고 있다.
-상근이는 가방을 k개 갖고있다.
-각 가방에 담을 수 있는 최대 무게는 c이다.
-가방에는 최대 한 개의 보석만 넣을 수 있다.
-훔칠 수 있는 보석의 최대 가격은 ?
 
 풀이 : 
 2중 for문을 돌아야 하기 때문에 시간초과 -> 냅색 불가능
@@ -26,6 +21,21 @@ using namespace std;
 lli n, k;
 lli c;
 
+bool cmp(pair<lli, lli> a, pair<lli, lli> b) {
+	if (a.first == b.first)
+		return a.second < b.second;
+	return a.first < b.first;
+}
+
+struct cmp2 {
+	bool operator()(pair<lli, lli> a, pair<lli, lli> b) {
+		if (a.second == b.second)
+			return a.first < b.first;
+		return a.second > b.second;
+	}
+};
+
+
 int main() {
 	INIT;
 	cin >> n >> k;
@@ -35,36 +45,30 @@ int main() {
 		cin >> jewelry[i].first >> jewelry[i].second;
 	for (int i = 0; i < k; i++)
 		cin >> bagpack[i];
-	priority_queue<lli, vector<lli>> pq;
+	priority_queue<pair<lli, lli>, vector<pair<lli, lli>>, cmp2> pq;
 
 	sort(bagpack.begin(), bagpack.end());
-	sort(jewelry.begin(), jewelry.end());
+	sort(jewelry.begin(), jewelry.end(), cmp);
 
-	lli ans = 0, idx = 0;
-	// 용량이 작은 가방부터 우선적으로 채운다.
-	// 가방에 담을 수 있는 보석들 중 가격이 가장 높은 것을 담는다.
-
-	// 우선순위 큐는 현재 가방에 넣을 수 있는 보석들 정보만 저장한다. -> 값이 큰 순서대로 pop
-
-	/*
-	1. 가방의 개수로 순회
-	2. 현재 가방에 들어갈 수 있는 보석들만큼 우선순위큐에 저장
-	3. 우선순위큐 top pop
-	*/
-	
-	// 1. 
-	for (int i = 0; i < k; i++) {
-		// 2. 
-		while (idx < n) {
-			if (bagpack[i] >= jewelry[idx].first)
-				pq.push(jewelry[idx++].second);
-			else
-				break;
+	lli ans = 0;
+	// 일단 다 넣고 시작하기
+	// 만약 넣을 자리 없다면, (무게 낮은 순, 가방 큰 순)으로 정렬해서 채워넣기
+	for (int i = n - 1; i > -1; i--) {
+		if (!bagpack.empty() && bagpack.back() >= jewelry[i].first) {
+			ans += jewelry[i].second;
+			pq.push({ bagpack.back(), jewelry[i].second });
+			bagpack.pop_back();
 		}
-		// 3. 
-		if (!pq.empty()) {
-			ans += pq.top();
-			pq.pop();
+		// 다 차 있는 경우, pq에서 찾아내기
+		else {
+			if (!pq.empty() && pq.top().first > jewelry[i].first) {
+				if (pq.top().second < jewelry[i].second) {
+					int bag = pq.top().first;
+					ans += jewelry[i].second - pq.top().second;
+					pq.pop();
+					pq.push({ bag, jewelry[i].second });
+				}
+			}
 		}
 	}
 
