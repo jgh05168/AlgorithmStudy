@@ -1,59 +1,44 @@
 #include <iostream>
-#include <vector>
 #include <cstring>
 
 using namespace std;
 
 int t, n, m;
-vector<int> to_tall[501];
-vector<int> to_small[501];
-int visited[501];
-int cnt[501];
-
-int dfs(const vector<int> graph[], int u) {
-    visited[u] = 1;
-    int reach = 1;  // 자신을 포함한 도달 가능한 노드 수
-    for (int v : graph[u]) {
-        if (!visited[v]) {
-            reach += dfs(graph, v);
-        }
-    }
-    return reach;
-}
+int graph[501][501];
 
 int main() {
     cin >> t;
     for (int tc = 1; tc <= t; tc++) {
         // input()
-        for (int i = 0; i < 501; i++) {
-            to_tall[i].clear();
-            to_small[i].clear();
-        }
-        memset(cnt, 0, sizeof(cnt));
-
+        memset(graph, 0x3f, sizeof(graph));  // 무한대로 초기화
         cin >> n >> m;
         int a, b;
         for (int i = 0; i < m; i++) {
             cin >> a >> b;
-            to_tall[a].push_back(b);
-            to_small[b].push_back(a);
+            graph[a][b] = 1;
         }
 
-        // start()
-        for (int i = 1; i <= n; i++) {
-            memset(visited, 0, sizeof(visited));
-            int tall_count = dfs(to_tall, i) - 1;  // 자신 제외
-            cnt[i] += tall_count;
-
-            memset(visited, 0, sizeof(visited));
-            int small_count = dfs(to_small, i) - 1;  // 자신 제외
-            cnt[i] += small_count;
+        // 플로이드-와샬
+        for (int k = 1; k <= n; k++) {
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    if (graph[i][j] > graph[i][k] + graph[k][j]) {
+                        graph[i][j] = graph[i][k] + graph[k][j];
+                    }
+                }
+            }
         }
 
+        // 자신이 몇 번째인지 알 수 있는 학생 수 계산
         int ans = 0;
         for (int i = 1; i <= n; i++) {
-            if (cnt[i] == n - 1)  // 자신 외에 모든 학생과 관계가 있으면
-                ans++;
+            int count = 0;
+            for (int j = 1; j <= n; j++) {
+                if (graph[i][j] < 0x3f3f3f3f || graph[j][i] < 0x3f3f3f3f) {
+                    count++;
+                }
+            }
+            if (count == n - 1) ans++;
         }
 
         cout << '#' << tc << ' ' << ans << '\n';
