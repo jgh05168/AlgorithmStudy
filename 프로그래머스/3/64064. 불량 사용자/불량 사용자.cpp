@@ -23,9 +23,13 @@ int recur(int depth, vector<string>& user_id, vector<string>& banned_id, vector<
         // 현재 조합 확인 및 중복 방지 처리
         vector<int> combination(dat, dat + m); // 현재 조합
         sort(combination.begin(), combination.end()); // 정렬
-        if (find(uniqueCombinations.begin(), uniqueCombinations.end(), combination) != uniqueCombinations.end()) {
-            return 0; // 이미 존재하는 조합
+        
+        for (int i = 0; i < uniqueCombinations.size(); i++) {
+            if (uniqueCombinations[i] == combination) {
+                return 0;
+            }
         }
+
         uniqueCombinations.push_back(combination); // 새로운 조합 추가
         return 1;
     }
