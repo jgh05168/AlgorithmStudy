@@ -39,16 +39,16 @@ bool isValid(int r, int c){
 }
 
 int dijkstra(int sr, int sc, vector<vector<int>> &board){
-    queue<pair<int, pair<int, int>>> pq;
-    pq.push({-1, {sr, sc}});
+    queue<pair<int, pair<int, int>>> q;
+    q.push({-1, {sr, sc}});
     for (int i=0;i<4;i++)
         visited[i][sr][sc] = 0;
     int ans = INF;
-    while (!pq.empty()){
-        int cur_d = pq.front().first; // 이전에 왔던 길의 방향을 저장
-        int r = pq.front().second.first;
-        int c = pq.front().second.second;
-        pq.pop();
+    while (!q.empty()){
+        int cur_d = q.front().first; // 이전에 왔던 길의 방향을 저장
+        int r = q.front().second.first;
+        int c = q.front().second.second;
+        q.pop();
         
         for (int d = 0;d < 4; d++){
             int nr = r + dr[d], nc = c + dc[d];
@@ -56,15 +56,15 @@ int dijkstra(int sr, int sc, vector<vector<int>> &board){
                 int new_cost = 100;
                 if (cur_d != d)
                     new_cost += 500;
-                int total_cost = visited[cur_d][r][c] + new_cost;
-                if (visited[d][nr][nc] >= total_cost){
+                int total_cost = (cur_d == -1) ? new_cost : visited[cur_d][r][c] + new_cost;
+                if (visited[d][nr][nc] > total_cost){
                     // cout << nr << ' ' << nc << ' ' << total_cost << '\n';
                     if (nr == n - 1 && nc == n - 1){
                         ans = min(ans, total_cost - 500);
                         continue;
                     }
                     visited[d][nr][nc] = total_cost;
-                    pq.push({d, {nr, nc}});
+                    q.push({d, {nr, nc}});
                 }
             }
         }
@@ -77,11 +77,5 @@ int solution(vector<vector<int>> board) {
     init(board);
     
     int answer = dijkstra(0, 0, board);
-    for (int i=0;i<n;i++){
-        for (int j=0;j<n;j++)
-            cout << visited[i][j] << ' ';
-        cout << '\n';
-    }
-    
     return answer;
 }
