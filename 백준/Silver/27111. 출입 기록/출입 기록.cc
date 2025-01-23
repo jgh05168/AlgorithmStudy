@@ -11,6 +11,7 @@ n개 출입기록, 출입자가 출입한 시간순으로 기록됨
 */
 
 #include <iostream>
+#define INIT cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(0);
 
 using namespace std;
 
@@ -18,11 +19,11 @@ int n, a, b;
 int arr[200001] = { 0, };
 
 int main() {
-
+	INIT;
 	cin >> n;
 	int ans = 0;
 
-	for (int i=0;i<n;i++) {
+	for (int i = 0; i < n; i++) {
 		cin >> a >> b;
 		if (b) {
 			if (arr[a])
