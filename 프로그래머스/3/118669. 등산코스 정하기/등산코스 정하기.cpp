@@ -16,7 +16,7 @@ n개의 정점, 양방향 그래프
 #include <iostream>
 #include <algorithm>
 #include <queue>
-#include <map>
+#include <unordered_map>
 
 #define INF 99999999
 
@@ -24,12 +24,14 @@ using namespace std;
 
 
 int visited[50001] = {0, };
-map<int, int> summit_dict;
+unordered_map<int, int> summit_dict;
 
-void dijkstra(int su, vector<vector<pair<int, int>>> &graph, vector<int> &answer){
+void dijkstra(vector<int> &gates, vector<vector<pair<int, int>>> &graph, vector<int> &answer){
     priority_queue<pair<int, int>> pq;
-    pq.push({0, su});
-    visited[su] = 0;
+    for (auto su : gates){
+        pq.push({0, su});
+        visited[su] = 0;
+    }
     
     while (!pq.empty()){
         int w = pq.top().first;
@@ -81,10 +83,7 @@ vector<int> solution(int n, vector<vector<int>> paths, vector<int> gates, vector
         summit_dict[su] = 1;
     }
     
-    for (auto su : gates){
-        dijkstra(su, graph, answer);
-        cout << '\n';
-    }
+    dijkstra(gates, graph, answer);
     
     
     return answer;
