@@ -30,41 +30,37 @@ using namespace std;
 int n, m, k, s_size;
 char grid[11][11];
 string s;
-
-int dp[11][11];
+int dp[11][11][6]; // 최대 길이 5까지 저장 가능
 unordered_map<string, int> string_table;
 
 int dr[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 int dc[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 
+int top_down(int r, int c, int depth) {
+	// 종료 조건 : 문자열이 맞는지는 사전에 검사했기 때문에 길이만 검사하면 된다.
+	if (depth == s_size) 
+		return 1;
 
-int top_down(int depth, string cur_s, int r, int c) {
-	// 종료 조건
-	if (depth == s_size) {
-		if (cur_s == s)
-			return 1;
-		return 0;
-	}
+	// DP 캐싱 확인
+	if (dp[r][c][depth] != -1) 
+		return dp[r][c][depth];
 
-	// 해당 칸에 방문한 경우가 존재하면 return
-	if (dp[r][c] != -1)
-		return dp[r][c];
+	dp[r][c][depth] = 0;
 
-	// 8방향 탐색 시작
-	int dp_val = 0;
+	// 8방향 탐색
 	for (int d = 0; d < 8; d++) {
 		int nr = (r + dr[d] + n) % n;
 		int nc = (c + dc[d] + m) % m;
-		if (grid[nr][nc] == s[depth])
-			dp_val += top_down(depth + 1, cur_s + grid[nr][nc], nr, nc);
+		if (grid[nr][nc] == s[depth]) {
+			dp[r][c][depth] += top_down(nr, nc, depth + 1);
+		}
 	}
-	return dp_val;
+	return dp[r][c][depth];
 }
-
 
 void init() {
 	cin.tie(0); cout.tie(0); ios::sync_with_stdio(false);
-	
+
 	cin >> n >> m >> k;
 	for (int i = 0; i < n; i++) {
 		cin >> s;
@@ -73,39 +69,36 @@ void init() {
 	}
 }
 
-
 void solution() {
-
 	while (k--) {
-		int answer = 0;
 		cin >> s;
-		// 이전에 중복된 값이면 바로 출력
-		if (string_table[s]) {
+
+		// 이미 계산한 문자열이면 바로 출력
+		if (string_table.count(s)) {
 			cout << string_table[s] << '\n';
 			continue;
 		}
-		// 경우의 수 탐색 시작
+
 		s_size = s.size();
+		memset(dp, -1, sizeof(dp)); // DP 배열 초기화
+		int answer = 0;
+
+		// 모든 시작 위치 탐색
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				if (grid[i][j] == s[0]) {
-					memset(dp, -1, sizeof(dp));
-					string new_s = "";
-					answer += top_down(1, new_s + grid[i][j], i, j);
+					answer += top_down(i, j, 1);
 				}
 			}
 		}
+
 		cout << answer << '\n';
-		string_table[s] = answer;
+		string_table[s] = answer; // 결과 캐싱
 	}
-
 }
-
 
 int main() {
 	init();
-
 	solution();
-
 	return 0;
 }
