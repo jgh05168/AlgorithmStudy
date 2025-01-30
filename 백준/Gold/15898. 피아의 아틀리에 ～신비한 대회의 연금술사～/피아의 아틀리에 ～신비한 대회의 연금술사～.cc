@@ -22,6 +22,7 @@
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
+#include <cstring>
 
 using namespace std;
 
@@ -32,14 +33,12 @@ int selected[11] = { 0, }; // 선택된 재료 여부
 int used[3] = { 0, }; // 선택한 3개 재료의 인덱스 저장
 unordered_map<char, int> scoreboard; // 점수 계산용
 
-
 void rotate(int num, int idx) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++)
-			ingredients[num][idx][4 - 1 - j][i] = ingredients[num][idx - 1][i][j];
+			ingredients[num][idx][j][3 - i] = ingredients[num][idx - 1][i][j];
 	}
 }
-
 
 void rotate_ingredients() {
 	for (int i = 0; i < m; i++) {
@@ -51,48 +50,33 @@ void rotate_ingredients() {
 
 void get_ingredients(int depth, int &answer) {
 	if (depth == 3) {
-		// 최종 점수 계산
 		int tmp = 0;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				tmp += (pot[i][j].first * scoreboard[pot[i][j].second]);
+				tmp += pot[i][j].first * scoreboard[pot[i][j].second];
 			}
 		}
 		answer = max(answer, tmp);
 		return;
 	}
 
-	int idx = used[depth]; // 현재 선택한 재료
-	pair<int, char> return_pot[5][5]; // 백트래킹을 위한 원본 저장
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
-			return_pot[i][j] = pot[i][j];
-		}
-	}
+	int idx = used[depth];
+	pair<int, char> return_pot[5][5];
+	memcpy(return_pot, pot, sizeof(pot));
 
-	
 	for (int sr = 0; sr <= 1; sr++) { // 2x2 내에서 시작 위치 선택
 		for (int sc = 0; sc <= 1; sc++) {
 			for (int d = 0; d < 4; d++) { // 회전 상태 탐색
 				for (int r = 0; r < 4; r++) {
 					for (int c = 0; c < 4; c++) {
 						int nr = sr + r, nc = sc + c;
-						pot[nr][nc].first += ingredients[idx][d][r][c].first;
-						if (pot[nr][nc].first < 0)
-							pot[nr][nc].first = 0;
-						else if (pot[nr][nc].first > 9)
-							pot[nr][nc].first = 9;
+						pot[nr][nc].first = min(max(pot[nr][nc].first + ingredients[idx][d][r][c].first, 0), 9);
 						if (ingredients[idx][d][r][c].second != 'W')
 							pot[nr][nc].second = ingredients[idx][d][r][c].second;
 					}
 				}
 				get_ingredients(depth + 1, answer);
-				// 원상 복구
-				for (int i = 0; i < n; i++) {
-					for (int j = 0; j < n; j++) {
-						pot[i][j] = return_pot[i][j];
-					}
-				}
+				memcpy(pot, return_pot, sizeof(pot));
 			}
 		}
 	}
@@ -108,7 +92,6 @@ void select_ingredients(int depth, int &answer) {
 			selected[i] = 1;
 			used[depth] = i;
 			select_ingredients(depth + 1, answer);
-			used[depth] = 0;
 			selected[i] = 0;
 		}
 	}
@@ -128,7 +111,6 @@ void init() {
 		}
 	}
 
-	// 가마 초기화
 	for (int r = 0; r < n; r++) {
 		for (int c = 0; c < n; c++)
 			pot[r][c] = { 0, 'W' };
@@ -141,6 +123,6 @@ int main() {
 	rotate_ingredients();
 	int answer = 0;
 	select_ingredients(0, answer);
-	cout << answer << endl;
+	cout << answer << '\n';
 	return 0;
 }
