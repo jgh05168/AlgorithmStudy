@@ -1,37 +1,52 @@
+
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 int MOD = 20170805;
+int M, N;
+int DY[] = { 0, 1 };
+int DX[] = { 1, 0 };
+vector<vector<vector<int>>> cache;
+
+int dfs(int y, int x, int dir, vector<vector<int>>& city_map)
+{
+  if (y + 1 == N && x + 1 == M)
+  {
+    return 1;
+  }
+
+  int& ret = cache[y][x][dir];
+  if (ret != -1)
+  {
+    return ret;
+  }
+
+  ret = 0;
+  for (int i = 0; i < 2; i++)
+  {
+    int dy = y + DY[i];
+    int dx = x + DX[i];
+    if (dy < 0 || dy >= N || dx < 0 || dx >= M ||
+        city_map[dy][dx] == 1 ||
+        (city_map[y][x] == 2 && i != dir))
+    {
+      continue;
+    }
+    ret = (ret + dfs(dy, dx, i, city_map)) % MOD;
+  }
+  return ret;
+}
 
 // 전역 변수를 정의할 경우 함수 내에 초기화 코드를 꼭 작성해주세요.
-int solution(int m, int n, vector<vector<int>> city_map) {
-    if ((n|m)==1) return 0;
+int solution(int m, int n, vector<vector<int>> city_map)
+{
+  int answer = 0;
 
-    int routes[m][n][2];
-    fill_n(&routes[0][0][0], m*n*2, 0);
+  M = n;
+  N = m;
+  cache.assign(N, vector<vector<int>>(M, vector<int>(2, -1)));
+  answer = dfs(0, 0, 0, city_map);
 
-    routes[0][0][0] = 1; // x
-    routes[0][0][1] = 1; // y
-    for (int x=0;x<m;x++) {
-        for (int y=0;y<n;y++) {
-            if ((x|y)==0) continue;
-
-            int* route = &routes[x][y][0];
-            int map = city_map[x][y];
-            if (map == 0) {
-                int cnt = 0;
-                if (x > 0) cnt = (cnt + routes[x-1][y][0]) % MOD;
-                if (y > 0) cnt = (cnt + routes[x][y-1][1]) % MOD;
-                route[0] = route[1] = cnt;
-            } else if (map == 1) {
-                route[0] = route[1] = 0;
-            } else if (map == 2) {
-                if (x > 0) route[0] = routes[x-1][y][0];
-                if (y > 0) route[1] = routes[x][y-1][1];
-            }
-        }
-    }
-    return routes[m-1][n-1][0];
+  return answer;
 }
