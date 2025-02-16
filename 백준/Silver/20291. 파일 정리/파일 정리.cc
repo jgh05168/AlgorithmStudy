@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#define INIT cin.tie(0); cout.tie(0); ios::sync_with_stdio(false);
 
 using namespace std;
 
@@ -17,6 +18,7 @@ string s;
 map<string, int> ans;
 
 int main() {
+	INIT
 	cin >> n;
 	for (int i = 0; i < n; i++) {
 		cin >> s;
