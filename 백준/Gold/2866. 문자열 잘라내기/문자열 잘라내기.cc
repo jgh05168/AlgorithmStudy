@@ -40,9 +40,8 @@ int main() {
 
 	// 중복 찾기 시작
 	int answer = 0;
+	unordered_map<string, int> word_dict;	// 매 번 초기화 진행(메모리초과 남)
 	for (int i = 0; i < n - 1; i++) {
-		unordered_map<string, int> word_dict;	// 매 번 초기화 진행(메모리초과 남)
-
 		for (int j = 0; j < new_words.size(); j++) {
 			if (word_dict[new_words[j]]) {
 				cout << answer << '\n';
@@ -54,6 +53,7 @@ int main() {
 			new_words[j].erase(new_words[j].begin());
 		}
 		answer++;
+		word_dict.clear();
 	}
 	cout << answer << '\n';
 
