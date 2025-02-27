@@ -13,7 +13,7 @@
 using namespace std;
 
 int n, m;
-vector<int> vec;
+int wok[101];
 int dp[10100];
 
 int main() {
@@ -23,16 +23,14 @@ int main() {
 	dp[0] = 0;
 
 	int a;
-	for (int i = 0; i < m; i++) {
-		cin >> a;
-		vec.push_back(a);
+	for (int i = 1; i < m + 1; i++) {
+		cin >> wok[i];
 	}
-	vec.push_back(0);
 
 	for (int i = 0; i <= n; i++) {
 		for (int j = 0; j < m; j++) {
 			for (int k = j + 1; k < m + 1; k++) {
-				int next = i + vec[j] + vec[k];
+				int next = i + wok[j] + wok[k];
 				if (next <= n) {
 					dp[next] = min(dp[next], dp[i] + 1);
 				}
