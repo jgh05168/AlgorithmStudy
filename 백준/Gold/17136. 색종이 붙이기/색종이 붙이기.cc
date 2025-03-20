@@ -75,7 +75,7 @@ void recur(int depth, int idx, int one_cnt) {
 		// 색종이 칠 한 부분이 아니라면 하나씩 붙여보기
 		if (!visited[r][c]) {
 			// 사이즈 별로 붙여보기 : O(5)
-			for (int width = 1; width < 6; width++) {
+			for (int width = 5; width > 0; width--) {
 				if (!papers[width])
 					continue;
 				// 붙일 수 있는 사이즈인지 체크 : O(5 x 5)
