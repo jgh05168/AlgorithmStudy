@@ -49,6 +49,7 @@ int main() {
 					if (ans < abs(lego_list[a] - lego_list[b])) {
 						ans1 = lego_list[a], ans2 = lego_list[b];
 						ans = abs(lego_list[a] - lego_list[b]);
+						break;
 					}
 				}
 				a++;
