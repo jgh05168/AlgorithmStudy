@@ -54,36 +54,30 @@ int bfs() {
 	visited[sr][sc] = 0;
 
 	while (!q.empty()) {
+		int r = q.front().first;
+		int c = q.front().second;
+		q.pop();
 
-		// 같은 거리의 큐는 모두 pop하며 한 번에 확인하기 -> 중복 이동을 방지하자
-		int q_size = q.size();
+		if (r == er && c == ec) {
+			return visited[r][c];
+		}
 
-		while (q_size--) {
-			int r = q.front().first;
-			int c = q.front().second;
-			q.pop();
+		for (int d = 0; d < 4; d++) {
+			for (int move = 1; move <= k; move++) {
+				int nr = r + dr[d] * move;
+				int nc = c + dc[d] * move;
 
-			if (r == er && c == ec) {
-				return visited[r][c];
-			}
+				// 현재 위치가 새로운 이동보다 작다면, continue 해줘야함
+				// visited는 다익스트라의 cost처럼 활용
+				if (!isValid(nr, nc) || grid[nr][nc] == '#' || visited[nr][nc] < visited[r][c] + 1) 
+					break;
 
-			for (int d = 0; d < 4; d++) {
-				for (int move = 1; move <= k; move++) {
-					int nr = r + dr[d] * move;
-					int nc = c + dc[d] * move;
-
-					// 현재 위치가 새로운 이동보다 작다면, continue 해줘야함
-					// visited는 다익스트라의 cost처럼 활용
-					if (!isValid(nr, nc) || grid[nr][nc] == '#' || visited[nr][nc] < visited[r][c] + 1) 
-						break;
-					
-
-					if (visited[nr][nc] == INF) {
-						visited[nr][nc] = visited[r][c] + 1;
-						q.push({ nr, nc });
-					}
+				if (visited[nr][nc] == INF) {
+					visited[nr][nc] = visited[r][c] + 1;
+					q.push({ nr, nc });
 				}
 			}
+			
 		}
 	}
 	return -1;
