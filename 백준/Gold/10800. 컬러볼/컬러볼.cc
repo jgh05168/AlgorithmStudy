@@ -36,6 +36,7 @@ bool cmp(pair<int, pair<int, int>> a, pair<int, pair<int, int>> b) {
 }
 
 void init() {
+	cin.tie(0); cout.tie(0); ios::sync_with_stdio(false);
 	cin >> n;
 	for (int i = 0; i < n; i++) {
 		cin >> c >> s;
@@ -60,9 +61,7 @@ void init() {
 void simulation() {
 	vector<pair<int, int>> ans;
 	for (int i = 0; i < n; i++) {
-        // 1. 0 이하로 떨어지는 경우, 예외 처리
 		int cnt_ball = prefixSum[color_balls[i].second.second - 1] - DAT[color_balls[i].second.first] > 0 ? prefixSum[color_balls[i].second.second - 1] - DAT[color_balls[i].second.first] : 0;
-        // 2. 이전 공과 중복인 경우, 예외처리
 		if (i > 0 && color_balls[i].second == color_balls[i - 1].second)
 			cnt_ball = ans.back().second;
 		ans.push_back({ color_balls[i].first, cnt_ball });
