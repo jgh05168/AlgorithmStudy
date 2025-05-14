@@ -23,6 +23,8 @@ int prefix_sum[26][200001] = { 0, };
 
 
 void init() {
+	cin.tie(0); cout.tie(0); ios::sync_with_stdio(false);
+
 	cin >> s;
 	cin >> n;
 
